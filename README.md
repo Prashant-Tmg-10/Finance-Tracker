@@ -1,4 +1,4 @@
-# 💰 Personal Finance Management API
+# Full Finance Management system -------still on working phase
 
 A scalable backend application built with **FastAPI** that helps users manage expenses, budgets, and financial records through a clean and modular REST API architecture.
 
