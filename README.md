@@ -128,7 +128,7 @@ Finance-Tracker/
 | FastAPI | Backend Framework |
 | SQLAlchemy | ORM |
 | Pydantic | Data Validation |
-| SQLite | Database |
+| PostgreSql | Database |
 | Uvicorn | ASGI Server |
 | Python-dotenv | Environment Management |
 
