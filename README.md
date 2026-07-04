@@ -1,48 +1,82 @@
-# 💰 Finance Tracker API
+# 💰 Personal Finance Management API
 
-A RESTful backend application built with **FastAPI** for managing personal finances, including expenses, budgets, and categories. The project follows a modular structure, uses environment-based configuration, and provides interactive API documentation for easy testing and integration.
+A scalable backend application built with **FastAPI** that helps users manage expenses, budgets, and financial records through a clean and modular REST API architecture.
+
+This project follows a layered architecture pattern with separate modules for routing, business logic, validation, and database operations, making it maintainable, scalable, and production-ready.
 
 ---
 
 ## 🚀 Features
 
-### Expense Management
-- Create new expenses
-- View all expenses
-- Get expense details by ID
-- Update existing expenses
+### 👤 User Management
+- Create and manage users
+- Maintain user-specific financial records
+- Structured user module architecture
+
+### 💸 Expense Management
+- Create expenses
+- Retrieve expense history
+- Update expense records
 - Delete expenses
+- Categorize expenses
 
-### Category Management
-- Create categories
-- View available categories
-- Update category information
-- Delete categories
+### 📊 Budget Management
+- Create monthly budgets
+- Update budget allocations
+- Monitor spending limits
+- Delete budgets
 
-### Budget Tracking
-- Set monthly budgets
-- Monitor spending against budgets
-- Manage budget records
+### ✅ Data Validation
+- Request validation using Pydantic DTOs
+- Consistent API response structures
+- Type-safe data handling
 
-### Validation & Configuration
-- Request validation using Pydantic
-- Environment variable management using `.env`
-- Centralized application settings
-- Error handling and response validation
+### ⚙️ Configuration Management
+- Environment-based configuration
+- Centralized settings management
+- Secure handling of sensitive data
+
+### 📚 API Documentation
+- Interactive Swagger UI
+- ReDoc documentation
+- Automatic OpenAPI schema generation
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗️ Architecture
 
-| Technology | Purpose |
-|------------|---------|
-| Python | Core programming language |
-| FastAPI | REST API framework |
-| Pydantic | Data validation |
-| SQLAlchemy | Database ORM |
-| SQLite / PostgreSQL | Database |
-| Uvicorn | ASGI server |
-| Python-dotenv | Environment variable management |
+The application follows a layered architecture:
+
+```text
+Client Request
+      │
+      ▼
+ Router Layer
+      │
+      ▼
+Controller Layer
+      │
+      ▼
+ Database Layer
+      │
+      ▼
+   Database
+```
+
+### Router Layer
+Handles API endpoints and request routing.
+
+### Controller Layer
+Contains business logic and application workflows.
+
+### DTO Layer
+Validates incoming requests and outgoing responses.
+
+### Model Layer
+Defines database entities and relationships.
+
+### Utility Layer
+Provides reusable helpers, settings, and database configuration.
 
 ---
 
@@ -52,76 +86,98 @@ A RESTful backend application built with **FastAPI** for managing personal finan
 Finance-Tracker/
 │
 ├── src/
-│   ├── api/
-│   │   ├── routes/
-│   │   └── dependencies/
-│   │
-│   ├── models/
-│   │   └── database models
-│   │
-│   ├── schemas/
-│   │   └── request/response schemas
-│   │
-│   ├── services/
-│   │   └── business logic
-│   │
-│   └── utils/
-│       ├── db.py
-│       ├── settings.py
-│       └── helpers.py
 │
-├── .env
+├── budget/
+│   ├── controller.py
+│   ├── router.py
+│   ├── models.py
+│   ├── dtos.py
+│   └── enum.py
+│
+├── expense/
+│   ├── controller.py
+│   ├── router.py
+│   ├── models.py
+│   ├── dtos.py
+│   └── enum.py
+│
+├── user/
+│   ├── controller.py
+│   ├── router.py
+│   ├── models.py
+│   └── dtos.py
+│
+├── utils/
+│   ├── db.py
+│   ├── settings.py
+│   └── helpers.py
+│
 ├── main.py
 ├── requirements.txt
+├── .env
 └── README.md
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+## 🛠️ Tech Stack
 
-### 1. Clone the Repository
+| Technology | Purpose |
+|------------|---------|
+| Python | Core Programming Language |
+| FastAPI | Backend Framework |
+| SQLAlchemy | ORM |
+| Pydantic | Data Validation |
+| SQLite | Database |
+| Uvicorn | ASGI Server |
+| Python-dotenv | Environment Management |
+
+---
+
+## ⚙️ Installation
+
+### Clone Repository
 
 ```bash
-git clone <your-repository-url>
-cd Finance-Tracker
+git clone https://github.com/Prashant-Tmg-10/finance-tracker.git
+cd finance-tracker
 ```
 
-### 2. Create Virtual Environment
+### Create Virtual Environment
 
 ```bash
 python -m venv env
 ```
 
-### 3. Activate Virtual Environment
+### Activate Virtual Environment
 
-**Windows**
+#### Windows
 
 ```bash
 env\Scripts\activate
 ```
 
-**Linux / macOS**
+#### Linux / macOS
 
 ```bash
 source env/bin/activate
 ```
 
-### 4. Install Dependencies
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure Environment Variables
+### Configure Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the project root:
 
 ```env
-DATABASE_URL=your_database_url
+DATABASE_URL=sqlite:///finance.db
 ```
 
-### 6. Run the Application
+### Run Application
 
 ```bash
 uvicorn main:app --reload
@@ -131,9 +187,7 @@ uvicorn main:app --reload
 
 ## 📖 API Documentation
 
-FastAPI automatically generates interactive API documentation.
-
-After starting the server, visit:
+After starting the server, access:
 
 ### Swagger UI
 
@@ -149,65 +203,73 @@ http://localhost:8000/redoc
 
 ---
 
-## 🔄 API Capabilities
+## 🔍 Core Modules
 
-### Expenses
-- Create expense
-- Get all expenses
-- Get expense by ID
-- Update expense
-- Delete expense
+### Expense Module
+Responsible for managing expense-related operations.
 
-### Categories
-- Create category
-- Get all categories
-- Update category
-- Delete category
+- Create Expense
+- View Expenses
+- Update Expense
+- Delete Expense
 
-### Budgets
-- Create budget
-- View budgets
-- Update budget
-- Delete budget
+### Budget Module
+Responsible for budget management.
 
----
+- Create Budget
+- View Budget
+- Update Budget
+- Delete Budget
 
-## 🔒 Environment Configuration
+### User Module
+Responsible for user-related operations.
 
-Sensitive configuration values are stored in `.env` files and excluded from version control using `.gitignore`.
-
-Example:
-
-```env
-DATABASE_URL=postgresql://user:password@localhost/finance_tracker
-```
+- Create User
+- Manage User Data
+- Associate Financial Records
 
 ---
 
-## 🎯 Future Improvements
+## 🔒 Security & Best Practices
 
-- JWT Authentication & Authorization
-- User Accounts & Profiles
-- Expense Analytics Dashboard
-- Monthly Financial Reports
-- Docker Containerization
-- Unit & Integration Testing
-- PostgreSQL Production Deployment
-- CI/CD Pipeline
+- Environment variables managed through `.env`
+- Sensitive files ignored using `.gitignore`
+- Request validation using DTOs
+- Modular and maintainable architecture
+- Separation of concerns across layers
 
 ---
 
-## 📚 What I Learned
+## 🎯 Future Enhancements
 
-Through this project I gained practical experience with:
+Planned improvements include:
 
-- Building REST APIs using FastAPI
-- Database integration and CRUD operations
-- Request validation using Pydantic
-- Environment-based configuration management
-- Organizing backend applications with a modular architecture
-- API documentation using Swagger and ReDoc
-- Git and GitHub version control workflows
+- JWT Authentication
+- Password Hashing
+- PostgreSQL Integration
+- Alembic Database Migrations
+- Docker Support
+- Automated Testing with Pytest
+- Financial Analytics Dashboard
+- Budget Alerts & Notifications
+- Recurring Expense Tracking
+- PDF & Excel Report Generation
+- CI/CD Pipeline with GitHub Actions
+- Role-Based Access Control (RBAC)
+
+---
+
+## 💡 Key Backend Concepts Demonstrated
+
+- RESTful API Development
+- CRUD Operations
+- Layered Architecture
+- Data Validation
+- Environment-Based Configuration
+- Database Integration
+- API Documentation
+- Modular Project Structure
+- Separation of Concerns
 
 ---
 
@@ -215,7 +277,7 @@ Through this project I gained practical experience with:
 
 **Prashant**
 
-Backend Developer | Python Enthusiast
+Backend Developer | Python Developer
 
 GitHub: https://github.com/Prashant-Tmg-10
 
@@ -223,4 +285,4 @@ GitHub: https://github.com/Prashant-Tmg-10
 
 ## 📄 License
 
-This project is created for learning and portfolio purposes.
+This project is developed for learning, portfolio, and educational purposes.
