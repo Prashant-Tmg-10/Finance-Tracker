@@ -9,6 +9,7 @@ from src.budget.enum import Period
 from sqlalchemy import func
 
 
+
 def create_budget(body, db, user):
 
     start_date = datetime.utcnow()
@@ -142,7 +143,7 @@ def delete_budget(
 
 def summary(db:Session,user:UserModel):
     
-    today=date.today()
+    today=datetime.now()
        
     budgets = (
         db.query(BudgetModel)
@@ -157,22 +158,39 @@ def summary(db:Session,user:UserModel):
     if not budgets:
         raise HTTPException(404,detail="No active budget found")
     
-    total_spent=db.query(func.sum(ExpenseModel.amount)
+    total_spent=(db.query(func.sum(ExpenseModel.amount))
                          .filter(ExpenseModel.user_id==user.id,
-                                 ExpenseModel.created_on<=today,
-                                 ExpenseModel.created_on>=today,
+                                 ExpenseModel.created_on>=budgets.start_date,
+                                 ExpenseModel.created_on<=budgets.end_date,
                                 
                          ).scalar()) or 0
-
+    
     remaining=budgets.amount - total_spent
+
+    used_percentage = round(
+    (total_spent / budgets.amount) * 100,
+    2
+    ) if budgets.amount > 0 else 0
+
+    if used_percentage<50:
+        status="SAFE"
+
+    elif used_percentage<80:
+        status="Warning"
     
-    
+    elif used_percentage<=100:
+        status="warning"
+    else:
+        status="EXCEED"
 
     return {
-        "budget_amount": budgets.amount,
-        "total spent": total_spent,
-        "remaining": remaining,
-        "period": budgets.period,
-        "start_date":budgets.start_date,
-        "end_date":budgets.end_date
-    }
+    "budget_amount": budgets.amount,
+    "total_spent": total_spent,
+    "remaining": remaining,
+    "used_percentage": used_percentage,
+    "status": status,
+    "period": budgets.period,
+    "start_date": budgets.start_date,
+    "end_date": budgets.end_date
+}
+    

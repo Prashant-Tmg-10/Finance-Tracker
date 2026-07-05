@@ -5,7 +5,7 @@ from src.utils.db import get_db
 from src.utils.helpers import is_authenticated
 
 from src.budget import controller
-from src.budget.dtos import BudgetSchema, BudgetResponseSchema
+from src.budget.dtos import BudgetSchema, BudgetResponseSchema,BudgetSummaryResponse
 
 budget_routes = APIRouter(
     prefix="/budget"
@@ -94,3 +94,7 @@ def delete_budget(
         db,
         user
     )
+
+@budget_routes.get("/summary",response_model=BudgetSummaryResponse,status_code=status.HTTP_200_OK)
+def summary(db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.summary(db,user)
