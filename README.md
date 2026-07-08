@@ -8,6 +8,25 @@ This project follows a layered architecture pattern with separate modules for ro
 
 ## 🚀 Features
 
+## ✅ Current Features
+
+Implemented so far:
+
+- User Registration
+- User Login
+- JWT Authentication
+- Password Hashing
+- PostgreSQL Database Integration
+- SQLAlchemy ORM
+- Alembic Database Migrations
+- Expense CRUD Operations
+- Budget CRUD Operations
+- Budget Summary API
+- Expense Filtering with Query Parameters
+- Input Validation using Pydantic
+- Protected Routes with Dependency Injection
+- Clean Layered Architecture (Router → Controller → Database)
+
 ### 👤 User Management
 - Create and manage users
 - Maintain user-specific financial records
@@ -245,18 +264,26 @@ Responsible for user-related operations.
 Planned improvements include:
 
 - JWT Authentication
-- Password Hashing
-- PostgreSQL Integration
-- Alembic Database Migrations
+- ## 🎯 Future Enhancements
+
+Planned improvements include:
+
+- Expense Pagination
+- Expense Analytics
+- Monthly Financial Reports
+- Budget Alerts & Notifications
+- Recurring Expense Tracking
+- CSV/PDF & Excel Report Generation
 - Docker Support
+- Automated Testing with Pytest
+- CI/CD Pipeline with GitHub Actions
+- Role-Based Access Control (RBAC)
+- Admin Dashboard & User Management
 - Automated Testing with Pytest
 - Financial Analytics Dashboard
 - Budget Alerts & Notifications
-- Recurring Expense Tracking
-- PDF & Excel Report Generation
-- CI/CD Pipeline with GitHub Actions
-- Role-Based Access Control (RBAC)
 
+  
 ---
 
 ## 💡 Key Backend Concepts Demonstrated
