@@ -3,6 +3,9 @@ from sqlalchemy.orm import Session
 from src.expense.models import ExpenseModel
 from src.user.models import UserModel
 from fastapi import HTTPException
+from src.expense.enum import CategoryEnum
+from datetime import date
+
 
 def create_expense(body:ExpenseSchema,db:Session,user:UserModel):
     data=(body.model_dump())
@@ -38,8 +41,34 @@ def get_one_expense(expense_id:int,db:Session,user:UserModel):
 
 
 #get all expenses by user -- later edit
-def get_all_expenses(db:Session,user:UserModel):
-    all_expenses=db.query(ExpenseModel).filter(ExpenseModel.user_id==user.id).all()
+def get_all_expenses(
+        db:Session,
+        user:UserModel,
+        category:CategoryEnum | None = None,
+        min_amount:float | None = None,
+        max_amount:float | None= None,
+        start_date:date | None = None,
+        end_date:date | None = None,):
+    
+    
+    query=db.query(ExpenseModel).filter(ExpenseModel.user_id==user.id)
+
+    
+    if category:
+        query=query.filter(ExpenseModel.category==category.value)
+
+    if min_amount is not None:
+        query=query.filter(ExpenseModel.amount>=min_amount)
+
+    if max_amount is not None:
+        query=query.filter(ExpenseModel.amount<=max_amount)
+
+    
+
+    
+
+    all_expenses=query.all()
+
 
 
     return all_expenses

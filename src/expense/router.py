@@ -4,6 +4,9 @@ from src.utils.db import get_db
 from src.expense import controller
 from src.expense.dtos import ExpenseSchema,ExpenseResponseSchema
 from src.utils.helpers import is_authenticated
+from src.expense.enum import CategoryEnum
+from datetime import date
+from decimal import Decimal
 
 expense_routes=APIRouter(prefix="/expense")
 
@@ -18,11 +21,25 @@ def get_expense_id(expense_id:int,db:Session=Depends(get_db),user=Depends(is_aut
 
 
 @expense_routes.get("/expenses",response_model=list[ExpenseResponseSchema],status_code=status.HTTP_200_OK)
-def get_all_expenses(db:Session=Depends(get_db),user=Depends(is_authenticated)):
-    return controller.get_all_expenses(db,user)
+def get_all_expenses(
+    category:CategoryEnum | None = None,
+    min_amount:Decimal | None = None,
+    max_amount:Decimal | None = None,
+    start_date:date | None =  None,
+    end_date:date | None= None,
+
+    db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.get_all_expenses(
+        db=db,
+        user=user,
+        category=category,
+        min_amount=min_amount,
+        max_amount=max_amount,
+        start_date=start_date,
+        end_date=end_date)
 
 
-@expense_routes.put("/update/{expense_id}",response_model=ExpenseResponseSchema,status_code=status.HTTP_201_CREATED)
+@expense_routes.put("/update/{expense_id}",response_model=ExpenseResponseSchema,status_code=status.HTTP_200_OK)
 def update_expense(body:ExpenseSchema,expense_id:int,db:Session=Depends(get_db),user=Depends(is_authenticated)):
     return controller.update_expense(body,expense_id,db,user)
 
