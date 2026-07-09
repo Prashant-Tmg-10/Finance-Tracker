@@ -5,6 +5,7 @@ from src.user.models import UserModel
 from fastapi import HTTPException
 from src.expense.enum import CategoryEnum
 from datetime import date
+from sqlalchemy import func
 
 
 def create_expense(body:ExpenseSchema,db:Session,user:UserModel):
@@ -63,9 +64,11 @@ def get_all_expenses(
     if max_amount is not None:
         query=query.filter(ExpenseModel.amount<=max_amount)
 
-    
+    if start_date is not None:
+        query=query.filter(func.date(ExpenseModel.created_on)>=start_date)
 
-    
+    if end_date is not None:
+        query=query.filter(func.date(ExpenseModel.created_on)<=end_date)
 
     all_expenses=query.all()
 
