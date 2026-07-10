@@ -27,6 +27,8 @@ def get_all_expenses(
     max_amount:Decimal | None = None,
     start_date:date | None =  None,
     end_date:date | None= None,
+    page: int =1,
+    limit: int =10,
 
     db:Session=Depends(get_db),user=Depends(is_authenticated)):
     return controller.get_all_expenses(
@@ -36,7 +38,9 @@ def get_all_expenses(
         min_amount=min_amount,
         max_amount=max_amount,
         start_date=start_date,
-        end_date=end_date)
+        end_date=end_date,
+        page=page,
+        limit=limit)
 
 
 @expense_routes.put("/update/{expense_id}",response_model=ExpenseResponseSchema,status_code=status.HTTP_200_OK)

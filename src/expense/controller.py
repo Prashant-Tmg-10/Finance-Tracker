@@ -49,10 +49,15 @@ def get_all_expenses(
         min_amount:float | None = None,
         max_amount:float | None= None,
         start_date:date | None = None,
-        end_date:date | None = None,):
+        end_date:date | None = None,
+        page:int = 1,
+        limit:int = 10):
     
     
     query=db.query(ExpenseModel).filter(ExpenseModel.user_id==user.id)
+
+
+    
 
     
     if category:
@@ -70,7 +75,10 @@ def get_all_expenses(
     if end_date is not None:
         query=query.filter(func.date(ExpenseModel.created_on)<=end_date)
 
-    all_expenses=query.all()
+    query = query.order_by(ExpenseModel.created_on.desc())
+
+    offset=(page-1)* limit
+    all_expenses=query.offset(offset).limit(limit).all()
 
 
 
