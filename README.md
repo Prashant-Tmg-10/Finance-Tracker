@@ -14,7 +14,7 @@ Implemented so far:
 
 - User Registration
 - User Login
-- JWT Authentication
+- JWT Authentication 
 - Password Hashing
 - PostgreSQL Database Integration
 - SQLAlchemy ORM
