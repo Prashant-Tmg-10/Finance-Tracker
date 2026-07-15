@@ -2,7 +2,7 @@ from fastapi import APIRouter,Depends,status
 from sqlalchemy.orm import Session
 from src.utils.db import get_db
 from src.expense import controller
-from src.expense.dtos import ExpenseSchema,ExpenseResponseSchema
+from src.expense.dtos import ExpenseSchema,ExpenseResponseSchema,ExpenseAnlayticsSchema
 from src.utils.helpers import is_authenticated
 from src.expense.enum import CategoryEnum
 from datetime import date
@@ -51,3 +51,7 @@ def update_expense(body:ExpenseSchema,expense_id:int,db:Session=Depends(get_db),
 @expense_routes.delete("/delete/{expense_id}",response_model=None,status_code=status.HTTP_204_NO_CONTENT)
 def delete_expense(expense_id:int,db:Session=Depends(get_db),user=Depends(is_authenticated)):
     return controller.delete_expense(expense_id,db,user)
+
+@expense_routes.get("/analytics",response_model=ExpenseAnlayticsSchema,status_code=status.HTTP_200_OK)
+def analytics(db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.analytics(db,user)

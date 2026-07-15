@@ -1,6 +1,6 @@
-from src.expense.dtos import ExpenseSchema
+from src.expense.dtos import ExpenseSchema, ExpenseAnlayticsSchema
 from sqlalchemy.orm import Session
-from src.expense.models import ExpenseModel
+from src.expense.models import ExpenseModel 
 from src.user.models import UserModel
 from fastapi import HTTPException
 from src.expense.enum import CategoryEnum
@@ -121,3 +121,21 @@ def delete_expense(expense_id:int,db:Session,user:UserModel):
 
 
     return None
+
+
+def analytics(db:Session,user:UserModel):
+    result = db.query(
+    func.sum(ExpenseModel.amount).label("total_spent"),
+    func.count(ExpenseModel.id).label("total_expenses"),
+    func.max(ExpenseModel.amount).label("highest_spent"),
+    func.min(ExpenseModel.amount).label("lowest_spent"),
+    func.avg(ExpenseModel.amount).label("average_spent")).filter(ExpenseModel.user_id == user.id).first()
+    
+    
+    return ExpenseAnlayticsSchema(
+    total_expenses=result.total_expenses,
+    total_spent=result.total_spent,
+    highest_spent=result.highest_spent,
+    lowest_spent=result.lowest_spent,
+    average_spent=result.average_spent
+)

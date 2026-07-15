@@ -16,4 +16,10 @@ class ExpenseResponseSchema(BaseModel):
     created_on:datetime
     user_id:int 
 
+class ExpenseAnlayticsSchema(BaseModel):
+    total_expenses:int
+    total_spent:int
+    highest_spent:float
+    lowest_spent:float
+    average_spent:float
 
