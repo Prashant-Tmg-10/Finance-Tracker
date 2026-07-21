@@ -23,3 +23,6 @@ class ExpenseAnlayticsSchema(BaseModel):
     lowest_spent:float
     average_spent:float
 
+class ExpenseReportSchema(BaseModel):
+    category:CategoryEnum
+    total_spent:int

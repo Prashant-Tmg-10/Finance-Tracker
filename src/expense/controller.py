@@ -1,4 +1,4 @@
-from src.expense.dtos import ExpenseSchema, ExpenseAnlayticsSchema
+from src.expense.dtos import ExpenseSchema, ExpenseAnlayticsSchema,ExpenseReportSchema
 from sqlalchemy.orm import Session
 from src.expense.models import ExpenseModel 
 from src.user.models import UserModel
@@ -139,3 +139,22 @@ def analytics(db:Session,user:UserModel):
     lowest_spent=result.lowest_spent,
     average_spent=result.average_spent
 )
+
+def report(db:Session,user:UserModel):
+
+    report=db.query(ExpenseModel.category,
+                    func.sum(ExpenseModel.amount).label("total_spent")
+                    ).filter(ExpenseModel.user_id==user.id
+                    ).group_by(ExpenseModel.category).all()
+    
+
+    result=[]
+    for item in report:
+        result.append(ExpenseReportSchema(
+    category=item.category,
+    total_spent=item.total_spent
+))
+    
+
+
+    return result
