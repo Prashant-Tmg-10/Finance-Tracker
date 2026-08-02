@@ -1,11 +1,12 @@
-from src.expense.dtos import ExpenseSchema, ExpenseAnlayticsSchema,ExpenseReportSchema
+from src.expense.dtos import ExpenseSchema, ExpenseAnlayticsSchema,ExpenseReportSchema,MothlyreportSchema
 from sqlalchemy.orm import Session
 from src.expense.models import ExpenseModel 
 from src.user.models import UserModel
 from fastapi import HTTPException
 from src.expense.enum import CategoryEnum
 from datetime import date
-from sqlalchemy import func
+from sqlalchemy import func ,extract
+import calendar
 
 
 def create_expense(body:ExpenseSchema,db:Session,user:UserModel):
@@ -156,5 +157,25 @@ def report(db:Session,user:UserModel):
 ))
     
 
+
+    return result
+
+def monthly_report(db:Session,user:UserModel,year:int):
+    report=(
+        db.query(
+            extract("month",ExpenseModel.created_on).label("month"),
+            func.sum(ExpenseModel.amount).label("total_spent")
+        )
+        .filter(ExpenseModel.user_id==user.id)
+        .filter(extract("year",ExpenseModel.created_on)==year)
+        .group_by(extract("month",ExpenseModel.created_on))
+        .all()
+    )
+    result=[]
+    for item in report:
+        result.append(MothlyreportSchema(
+            month=calendar.month_name[int(item.month)],
+            total_spent=float(item.total_spent)
+        ))
 
     return result

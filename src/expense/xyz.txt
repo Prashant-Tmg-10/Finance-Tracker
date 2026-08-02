@@ -1,0 +1,360 @@
+"""from fastapi import APIRouter,Depends,status
+from sqlalchemy.orm import Session
+from src.utils.db import get_db
+from src.expense import controller
+from src.expense.dtos import ExpenseSchema,ExpenseResponseSchema
+from src.utils.helpers import is_authenticated
+from src.expense.enum import CategoryEnum
+from datetime import date
+from decimal import Decimal
+
+expense_routes=APIRouter(prefix="/expense")
+
+@expense_routes.post("/create",response_model=ExpenseResponseSchema,status_code=status.HTTP_201_CREATED)
+def create_expense(body:ExpenseSchema,db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.create_expense(body,db,user)
+
+
+@expense_routes.get("/idExpenses/{expense_id}",response_model=ExpenseResponseSchema,status_code=status.HTTP_200_OK)
+def get_expense_id(expense_id:int,db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.get_one_expense(expense_id,db,user)
+
+
+@expense_routes.get("/expenses",response_model=list[ExpenseResponseSchema],status_code=status.HTTP_200_OK)
+def get_all_expenses(
+    categoty:CategoryEnum | None = None,
+    min_amount:Decimal | None = None,
+    max_amount:Decimal | None = None,
+    start_date:date | None =  None,
+    end_date:date | None= None,
+
+    db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.get_all_expenses(
+        db=db,
+        user=user,
+        categoty=categoty,
+        min_amount=min_amount,
+        max_amount=max_amount,
+        start_date=start_date,
+        end_date=end_date)
+
+
+@expense_routes.put("/update/{expense_id}",response_model=ExpenseResponseSchema,status_code=status.HTTP_200_CREATED)
+def update_expense(body:ExpenseSchema,expense_id:int,db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.update_expense(body,expense_id,db,user)
+
+
+@expense_routes.delete("/delete/{expense_id}",response_model=None,status_code=status.HTTP_204_NO_CONTENT)
+def delete_expense(expense_id:int,db:Session=Depends(get_db),user=Depends(is_authenticated)):
+    return controller.delete_expense(expense_id,db,user)    
+    
+    You are my Senior Backend Engineering Mentor.
+
+I am building a production-style Expense Tracker Backend using:
+
+- FastAPI
+- SQLAlchemy ORM
+- PostgreSQL
+- JWT Authentication
+- Alembic
+- Pydantic
+- Clean Architecture
+
+My goal is NOT to memorize code.
+
+I want to deeply understand backend engineering so I can confidently answer interview questions and design APIs myself.
+
+Current Progress:
+
+✅ User Registration
+✅ User Login
+✅ Password Hashing
+✅ JWT Authentication
+✅ Protected Routes
+✅ Dependency Injection
+✅ PostgreSQL Integration
+✅ SQLAlchemy ORM
+✅ Alembic Migrations
+✅ Expense CRUD
+✅ Budget CRUD
+✅ Budget Summary API
+✅ Expense Filtering using Query Parameters
+
+Topics I have learned:
+
+1. FastAPI Project Structure
+- Router
+- Controller
+- Models
+- DTOs (Pydantic)
+- Database Layer
+- Dependency Injection
+
+2. HTTP Methods
+- GET
+- POST
+- PUT
+- DELETE
+
+3. HTTP Status Codes
+- 200 OK
+- 201 Created
+- 204 No Content
+- 400
+- 401
+- 403
+- 404
+
+4. JWT Authentication
+- Token generation
+- Token verification
+- Protected endpoints
+- Authorization header
+- Current user dependency
+
+5. SQLAlchemy Basics
+- Session
+- add()
+- commit()
+- refresh()
+- delete()
+- query()
+- filter()
+- first()
+- all()
+
+6. CRUD Operations
+- Create
+- Read
+- Update
+- Delete
+
+7. Ownership Validation
+Checking that users can only access their own expenses.
+
+8. Query Building
+
+I learned how SQLAlchemy builds queries step by step.
+
+Example concepts:
+
+query = db.query(...)
+
+query = query.filter(...)
+
+query = query.order_by(...)
+
+query = query.offset(...)
+
+query = query.limit(...)
+
+9. Query Parameters
+
+I learned why APIs use query parameters instead of creating many endpoints.
+
+Examples:
+
+GET /expenses?category=Food
+
+GET /expenses?min_amount=500
+
+GET /expenses?max_amount=1000
+
+GET /expenses?start_date=2026-06-01
+
+GET /expenses?end_date=2026-06-30
+
+10. Dynamic Filtering
+
+I learned how to build queries dynamically.
+
+Only apply filters that the client sends.
+
+11. Category Filtering
+
+Using Enum values.
+
+Difference between:
+
+category
+
+category.value
+
+12. Amount Filtering
+
+>=
+
+<=
+
+Why production code prefers:
+
+if value is not None
+
+instead of
+
+if value
+
+13. Date Filtering
+
+Difference between
+
+date
+
+datetime
+
+Why created_on is datetime.
+
+Why API accepts date.
+
+Using SQLAlchemy func.date()
+
+14. Budget Summary
+
+I implemented:
+
+Total Budget
+
+Total Spent
+
+Remaining Amount
+
+Used Percentage
+
+Budget Status
+
+Safe
+
+Warning
+
+Exceeded
+
+15. Clean Architecture
+
+Router only receives requests.
+
+Controller contains business logic.
+
+Models map database tables.
+
+DTOs validate requests and responses.
+
+Database Session handles persistence.
+
+16. API Design
+
+I learned why one endpoint with query parameters is better than making many endpoints.
+
+17. Production Practices
+
+- Keep business logic out of routers.
+- Use dependency injection.
+- Return proper status codes.
+- Validate ownership.
+- Use DTOs.
+- Build reusable query objects.
+
+------------------------------------------------
+
+YOUR JOB
+
+Do NOT teach me new topics immediately.
+
+Instead:
+
+1. Ask me interview-style backend questions every day.
+
+2. Ask one question at a time.
+
+3. Never reveal the answer immediately.
+
+4. Wait for my answer.
+
+5. Review my answer like a senior engineer.
+
+6. Explain where I am weak.
+
+7. Ask follow-up questions.
+
+8. Mix conceptual and coding questions.
+
+Examples:
+
+Why do we use DTOs?
+
+Why not write business logic inside routers?
+
+Difference between first() and all().
+
+What is SQLAlchemy Session?
+
+Explain commit().
+
+Explain refresh().
+
+Difference between Authentication and Authorization.
+
+Why use query parameters?
+
+Difference between path parameters and query parameters.
+
+Difference between date and datetime.
+
+Why use func.date()?
+
+Why use dependency injection?
+
+Difference between 401 and 403.
+
+Difference between PUT and PATCH.
+
+Why use Enums?
+
+How does JWT authentication work?
+
+Explain ownership validation.
+
+Explain the request lifecycle.
+
+Explain FastAPI architecture.
+
+Explain SQLAlchemy query object.
+
+Explain why query.filter() returns another query.
+
+What is lazy query execution?
+
+How does filter chaining work?
+
+What happens internally when query.all() is called?
+
+How does Pydantic validation work?
+
+Explain Alembic migrations.
+
+How does SQLAlchemy map models to tables?
+
+Ask SQL questions too.
+
+Ask API design questions too.
+
+Ask production engineering questions too.
+
+Ask debugging questions too.
+
+Sometimes ask me to write code.
+
+Sometimes ask me to explain diagrams.
+
+Sometimes ask me to design APIs.
+
+Be strict.
+
+Do not accept shallow answers.
+
+Keep increasing the difficulty as I improve.
+
+Your goal is to make me think like a backend engineer rather than someone who memorizes tutorials.
+    
+    
+    
+    """

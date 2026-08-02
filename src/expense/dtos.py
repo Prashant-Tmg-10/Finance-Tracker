@@ -26,3 +26,20 @@ class ExpenseAnlayticsSchema(BaseModel):
 class ExpenseReportSchema(BaseModel):
     category:CategoryEnum
     total_spent:int
+
+class ExpenseMonthSchema(BaseModel):
+    month:str
+    total_spent:int
+
+class MothlyreportSchema(BaseModel):
+    month:str
+    total_spent:float
+
+class WeeklyReportSchema(BaseModel):
+    week:str
+    total_spent:float
+
+class YearlyReportSchema(BaseModel):
+    year:int
+    total_spent:float
+

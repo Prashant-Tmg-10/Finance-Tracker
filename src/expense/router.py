@@ -2,7 +2,7 @@ from fastapi import APIRouter,Depends,status
 from sqlalchemy.orm import Session
 from src.utils.db import get_db
 from src.expense import controller
-from src.expense.dtos import ExpenseSchema,ExpenseResponseSchema,ExpenseAnlayticsSchema,ExpenseReportSchema
+from src.expense.dtos import ExpenseSchema,ExpenseResponseSchema,ExpenseAnlayticsSchema,ExpenseReportSchema,MothlyreportSchema
 from src.utils.helpers import is_authenticated
 from src.expense.enum import CategoryEnum
 from datetime import date
@@ -59,3 +59,12 @@ def analytics(db:Session=Depends(get_db),user=Depends(is_authenticated)):
 @expense_routes.get("/report",response_model=list[ExpenseReportSchema],status_code=status.HTTP_200_OK)
 def report(db:Session=Depends(get_db),user=Depends(is_authenticated)):
     return controller.report(db,user)
+
+@expense_routes.get("/report/monthly",response_model=list[MothlyreportSchema],status_code=status.HTTP_200_OK)
+def monthlyreport(year:int,
+                  db:Session=Depends(get_db),
+                  user=Depends(is_authenticated),
+                  
+):
+    return controller.monthly_report(db,user,year)
+    
