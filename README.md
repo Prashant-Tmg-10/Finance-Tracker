@@ -1,4 +1,4 @@
-# Full Finance Management system -------still on working phase
+# Full Finance Management system --
 
 A scalable backend application built with **FastAPI** that helps users manage expenses, budgets, and financial records through a clean and modular REST API architecture.
 
